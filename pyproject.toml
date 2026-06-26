@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "battlebot-sim"
+version = "0.1.0"
+description = "Impact-damage simulator for combat robots: assign materials to an STL, run an NHRL stress battery, and view damage heatmaps."
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "numpy>=1.26,<2",  # pinned <2: numpy 2.x ABI caused intermittent native crashes during PyInstaller analysis
+    "scipy>=1.10",
+    "trimesh>=4.0",
+    "networkx>=3.0",       # used by trimesh for graph splits
+    "mujoco>=3.1",         # rigid-body physics engine (prebuilt Windows wheels)
+    "pyvista>=0.43",
+    "pyvistaqt>=0.11",
+    "PySide6>=6.5",
+    "Pillow>=10.0",        # PNG export
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+]
+
+[project.scripts]
+battlebot-sim = "battlebot_sim.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["battlebot_sim*"]
+
+[tool.setuptools.package-data]
+battlebot_sim = ["../data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

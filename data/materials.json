@@ -1,0 +1,14 @@
+{
+  "materials": [
+    {"name": "Aluminum 6061-T6", "density": 2700, "yield_strength": 276, "ultimate_strength": 310, "youngs_modulus": 68.9, "category": "metal"},
+    {"name": "Aluminum 7075-T6", "density": 2810, "yield_strength": 503, "ultimate_strength": 572, "youngs_modulus": 71.7, "category": "metal"},
+    {"name": "Mild Steel (A36)", "density": 7850, "yield_strength": 250, "ultimate_strength": 400, "youngs_modulus": 200, "category": "metal"},
+    {"name": "4140 Steel (Q&T)", "density": 7850, "yield_strength": 655, "ultimate_strength": 1020, "youngs_modulus": 205, "category": "metal"},
+    {"name": "Titanium Ti-6Al-4V", "density": 4430, "yield_strength": 880, "ultimate_strength": 950, "youngs_modulus": 113.8, "category": "metal"},
+    {"name": "UHMW-PE", "density": 940, "yield_strength": 21, "ultimate_strength": 38, "youngs_modulus": 0.7, "category": "plastic"},
+    {"name": "HDPE", "density": 970, "yield_strength": 26, "ultimate_strength": 33, "youngs_modulus": 1.0, "category": "plastic"},
+    {"name": "Polycarbonate (Lexan)", "density": 1200, "yield_strength": 62, "ultimate_strength": 65, "youngs_modulus": 2.3, "category": "plastic"},
+    {"name": "TPU (95A)", "density": 1210, "yield_strength": 30, "ultimate_strength": 40, "youngs_modulus": 0.05, "category": "plastic"},
+    {"name": "Carbon Fiber (quasi-iso)", "density": 1600, "yield_strength": 600, "ultimate_strength": 600, "youngs_modulus": 70, "category": "composite"}
+  ]
+}

@@ -1,0 +1,80 @@
+"""Brace load-sharing: a heuristic that lets brace-tagged parts shed stress.
+
+When a part sits next to a brace, the brace carries part of the impact load, so
+the part's local peak stress drops by a factor 1/(1 + k), where k is the brace's
+normalised axial stiffness k = E * A / L  (A = average cross-section, L = span).
+A fraction of the shed stress is transferred onto the brace itself.
+
+Stiffer / thicker braces (larger A) give larger k and therefore more relief —
+a deliberately simple beam-style heuristic, NOT structural FEA.
+"""
+
+from __future__ import annotations
+
+import copy
+
+import numpy as np
+
+from battlebot_sim.damage.model import DamageResult
+from battlebot_sim.mesh.segment import BotModel
+
+K_REF = 5.0e6          # reference axial stiffness (N/m) that gives k ~ 1
+ADJACENCY_TOL = 5e-3   # parts within 5 mm count as connected
+TRANSFER = 0.5         # fraction of shed stress pushed into the brace
+
+
+def _extents(part) -> np.ndarray:
+    b = part.bounds
+    return np.asarray(b[1] - b[0], dtype=float)
+
+
+def _brace_k(part) -> float:
+    ext = _extents(part)
+    span = float(max(ext.max(), 1e-6))
+    cross_section = part.volume_m3 / span      # average cross-sectional area
+    E = part.material.youngs_pa if part.material else 1.0
+    k_axial = E * cross_section / span
+    return k_axial / K_REF
+
+
+def _aabb_adjacent(a_part, b_part, tol: float) -> bool:
+    a, b = a_part.bounds, b_part.bounds
+    for ax in range(3):
+        lo = max(a[0][ax], b[0][ax])
+        hi = min(a[1][ax], b[1][ax])
+        if (lo - hi) > tol:        # separated by more than tol on this axis
+            return False
+    return True
+
+
+def apply_brace_sharing(result: DamageResult, bot: BotModel) -> DamageResult:
+    """Return a new DamageResult with brace stress relief applied."""
+    braces = [p for p in bot.parts if p.is_brace]
+    if not braces:
+        return result
+
+    out = copy.deepcopy(result)
+    others = [p for p in bot.parts if not p.is_brace]
+
+    for brace in braces:
+        k = _brace_k(brace)
+        reduction = 1.0 / (1.0 + k)
+        brace_faces = brace.face_ids
+        for part in others:
+            if not _aabb_adjacent(part, brace, ADJACENCY_TOL):
+                continue
+            faces = part.face_ids
+            shed = out.peak_stress_per_face[faces] * (1.0 - reduction)
+            out.peak_stress_per_face[faces] *= reduction
+            out.failure_margin_per_face[faces] *= reduction
+            # Transfer a share of the shed stress onto the brace.
+            if len(brace_faces):
+                out.peak_stress_per_face[brace_faces] += TRANSFER * float(shed.max())
+
+    # Recompute per-part summaries from the modified fields.
+    out.part_max_margin = {
+        p.index: float(out.failure_margin_per_face[p.face_ids].max())
+        if len(p.face_ids) else 0.0
+        for p in bot.parts
+    }
+    return out

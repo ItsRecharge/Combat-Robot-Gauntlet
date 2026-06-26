@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+*.spec.bak
+
+# PyInstaller work dir (keep build/battlebot_sim.spec tracked)
+build/pyi-work/
+build/*.log
+
+# venv
+.venv/
+venv/
+
+# PyInstaller
+*.exe
+battlebot_sim.build/
+
+# OS / editor
+.vscode/
+.idea/
+*.log
+
+# Test / output artifacts
+.pytest_cache/
+out/
+*.png
+!data/**/*.png
