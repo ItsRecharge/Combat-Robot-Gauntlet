@@ -4,8 +4,8 @@ assignment. These are pure (no OpenGL), so they run headless like the rest."""
 import numpy as np
 import trimesh
 
-from battlebot_sim import viz
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
+from gauntlet import viz
+from gauntlet.mesh.segment import BotModel, segment_mesh
 
 
 def _bot(two_box_bot):
@@ -59,7 +59,7 @@ def test_attach_field_smooth_subdivides_to_point_scalars(two_box_bot):
     """A coarse bot mesh must be subdivided into a denser POINT-scalar field so
     the heatmap reads as a smooth gradient — guards against the subdivision
     silently failing back to the coarse per-vertex mesh."""
-    from battlebot_sim.damage.model import DamageResult
+    from gauntlet.damage.model import DamageResult
 
     bot = _bot(two_box_bot)
     n = len(bot.original.faces)
@@ -81,7 +81,7 @@ def test_attach_field_smooth_subdivides_to_point_scalars(two_box_bot):
 
 
 def _result_with(bot, *, energy=None, margin=None):
-    from battlebot_sim.damage.model import DamageResult
+    from gauntlet.damage.model import DamageResult
 
     n = len(bot.original.faces)
     return DamageResult(

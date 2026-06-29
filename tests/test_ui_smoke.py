@@ -28,9 +28,9 @@ def app():
 
 
 def test_parts_panel_assigns_materials_and_masses(app):
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.panels import PartsPanel
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.panels import PartsPanel
 
     library = load_default_library()
     bot = load_bot(os.path.abspath(SAMPLE), scale_to_m=1.0)
@@ -48,9 +48,9 @@ def test_parts_panel_assigns_materials_and_masses(app):
 
 
 def test_parts_panel_bulk_assign_to_selected(app):
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.panels import PartsPanel
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.panels import PartsPanel
 
     library = load_default_library()
     bot = load_bot(os.path.abspath(SAMPLE), scale_to_m=1.0)
@@ -68,9 +68,9 @@ def test_parts_panel_bulk_assign_to_selected(app):
 
 
 def test_parts_panel_recalc_button(app):
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.panels import PartsPanel
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.panels import PartsPanel
 
     library = load_default_library()
     bot = load_bot(os.path.abspath(SAMPLE), scale_to_m=1.0)
@@ -85,9 +85,9 @@ def test_parts_panel_recalc_button(app):
 def test_parts_panel_searchable_combo_and_guard(app):
     from PySide6 import QtCore
 
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.panels import PartsPanel
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.panels import PartsPanel
 
     library = load_default_library()
     bot = load_bot(os.path.abspath(SAMPLE), scale_to_m=1.0)
@@ -109,9 +109,9 @@ def test_parts_panel_searchable_combo_and_guard(app):
 
 
 def test_parts_panel_selection_signal_no_echo(app):
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.panels import PartsPanel
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.panels import PartsPanel
 
     library = load_default_library()
     bot = load_bot(os.path.abspath(SAMPLE), scale_to_m=1.0)
@@ -129,7 +129,7 @@ def test_parts_panel_selection_signal_no_echo(app):
 
 
 def test_setup_and_results_panel_wiring(app):
-    from battlebot_sim.ui.panels import ResultsPanel, SetupPanel
+    from gauntlet.ui.panels import ResultsPanel, SetupPanel
 
     setup = SetupPanel()
     assert setup.current_class_key() in {"3lb", "12lb", "30lb"}
@@ -147,8 +147,8 @@ def test_setup_and_results_panel_wiring(app):
 
 
 def test_load_sample_emits_known_good_path(app):
-    from battlebot_sim.mesh.segment import sample_bot_path
-    from battlebot_sim.ui.panels import SetupPanel
+    from gauntlet.mesh.segment import sample_bot_path
+    from gauntlet.ui.panels import SetupPanel
 
     setup = SetupPanel()
     captured = []
@@ -161,7 +161,7 @@ def test_load_sample_emits_known_good_path(app):
 
 
 def test_setup_panel_unit_scales(app):
-    from battlebot_sim.ui.panels import SetupPanel
+    from gauntlet.ui.panels import SetupPanel
 
     setup = SetupPanel()
     units = [setup.unit_combo.itemText(i)
@@ -177,7 +177,7 @@ def test_setup_panel_unit_scales(app):
 
 
 def test_setup_panel_running_controls(app):
-    from battlebot_sim.ui.panels import SetupPanel
+    from gauntlet.ui.panels import SetupPanel
 
     setup = SetupPanel()
     assert setup.stop_btn.isHidden()             # Stop hidden until a run starts
@@ -210,11 +210,11 @@ def test_stream_worker_streams_and_finishes(app):
     sleeps collapse: it must stream chunks and emit a finished trace+result."""
     import numpy as np
 
-    from battlebot_sim.arena.nhrl import build_arena
-    from battlebot_sim.materials.assign import NHRL_CLASSES
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.main_window import StreamWorker
+    from gauntlet.arena.nhrl import build_arena
+    from gauntlet.materials.assign import NHRL_CLASSES
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.main_window import StreamWorker
 
     lib = load_default_library()
     wc = NHRL_CLASSES["3lb"]
@@ -239,7 +239,7 @@ def test_stream_worker_streams_and_finishes(app):
 
 def test_live_charts_rolling_window(app):
     """LiveCharts builds under offscreen Qt and bounds each series to the window."""
-    from battlebot_sim.ui.charts import LiveCharts, MetricSample
+    from gauntlet.ui.charts import LiveCharts, MetricSample
 
     charts = LiveCharts()
     charts.reset()
@@ -248,7 +248,7 @@ def test_live_charts_rolling_window(app):
             t=i * 0.1, peak_force=float(i), cum_energy=float(i) * 2,
             max_margin=min(1.4, i / 500.0), speed=i * 0.01, hit_rate=float(i)))
 
-    from battlebot_sim.ui.charts import WINDOW
+    from gauntlet.ui.charts import WINDOW
     assert charts.force.series.count() <= WINDOW
     assert charts.motion.series2 is not None          # dual series (speed + hits)
     assert charts.motion.series2.count() <= WINDOW
@@ -259,12 +259,12 @@ def test_live_charts_rolling_window(app):
 
 def test_stream_worker_emits_metrics(app):
     """The worker emits MetricSamples alongside chunks during a run."""
-    from battlebot_sim.arena.nhrl import build_arena
-    from battlebot_sim.materials.assign import NHRL_CLASSES
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.charts import MetricSample
-    from battlebot_sim.ui.main_window import StreamWorker
+    from gauntlet.arena.nhrl import build_arena
+    from gauntlet.materials.assign import NHRL_CLASSES
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.charts import MetricSample
+    from gauntlet.ui.main_window import StreamWorker
 
     lib = load_default_library()
     wc = NHRL_CLASSES["3lb"]
@@ -286,11 +286,11 @@ def test_stream_worker_emits_metrics(app):
 
 def test_stream_worker_cancel_finalizes_partial(app):
     """Cancelling mid-run still finalises: a (partial) trace+result is emitted."""
-    from battlebot_sim.arena.nhrl import build_arena
-    from battlebot_sim.materials.assign import NHRL_CLASSES
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.main_window import StreamWorker
+    from gauntlet.arena.nhrl import build_arena
+    from gauntlet.materials.assign import NHRL_CLASSES
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.main_window import StreamWorker
 
     lib = load_default_library()
     wc = NHRL_CLASSES["3lb"]
@@ -318,11 +318,11 @@ def test_stream_worker_cancel_finalizes_partial(app):
 def test_stream_worker_cancel_before_start(app):
     """Cancelling before the first frame must finish cleanly (not raise / fail)
     with an empty trace — the worker never emits a spurious failure."""
-    from battlebot_sim.arena.nhrl import build_arena
-    from battlebot_sim.materials.assign import NHRL_CLASSES
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.main_window import StreamWorker
+    from gauntlet.arena.nhrl import build_arena
+    from gauntlet.materials.assign import NHRL_CLASSES
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.main_window import StreamWorker
 
     lib = load_default_library()
     wc = NHRL_CLASSES["3lb"]
@@ -350,11 +350,11 @@ def test_stream_worker_cancel_from_another_thread(app):
 
     from PySide6 import QtCore
 
-    from battlebot_sim.arena.nhrl import build_arena
-    from battlebot_sim.materials.assign import NHRL_CLASSES
-    from battlebot_sim.materials.library import load_default_library
-    from battlebot_sim.mesh.segment import load_bot
-    from battlebot_sim.ui.main_window import StreamWorker
+    from gauntlet.arena.nhrl import build_arena
+    from gauntlet.materials.assign import NHRL_CLASSES
+    from gauntlet.materials.library import load_default_library
+    from gauntlet.mesh.segment import load_bot
+    from gauntlet.ui.main_window import StreamWorker
 
     lib = load_default_library()
     wc = NHRL_CLASSES["3lb"]

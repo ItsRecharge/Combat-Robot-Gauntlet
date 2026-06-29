@@ -2,9 +2,9 @@
 
 import trimesh
 
-from battlebot_sim.materials.library import load_default_library
-from battlebot_sim.mesh.brace_detect import auto_detect_braces
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
+from gauntlet.materials.library import load_default_library
+from gauntlet.mesh.brace_detect import auto_detect_braces
+from gauntlet.mesh.segment import BotModel, segment_mesh
 
 
 def _bot(parts_meshes, material="Aluminum 6061-T6"):

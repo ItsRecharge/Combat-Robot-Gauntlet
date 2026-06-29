@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 import trimesh
 
-from battlebot_sim.mesh.segment import BotModel, load_bot, segment_mesh
+from gauntlet.mesh.segment import BotModel, load_bot, segment_mesh
 
 
 def _two_named_boxes() -> trimesh.Scene:
@@ -153,7 +153,7 @@ def test_sample_bot_path_exists_and_loads():
     relies on this for an instant known-good run."""
     import os
 
-    from battlebot_sim.mesh.segment import load_bot, sample_bot_path
+    from gauntlet.mesh.segment import load_bot, sample_bot_path
 
     assert os.path.exists(sample_bot_path())
     bot = load_bot(sample_bot_path(), scale_to_m=1.0)

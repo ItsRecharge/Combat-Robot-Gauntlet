@@ -3,15 +3,15 @@
 import numpy as np
 import trimesh
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.materials.assign import NHRL_CLASSES
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
-from battlebot_sim.sim.battery import (
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.materials.assign import NHRL_CLASSES
+from gauntlet.mesh.segment import BotModel, segment_mesh
+from gauntlet.sim.battery import (
     StressBattery,
     class_strike_energy,
     run_battery,
 )
-from battlebot_sim.sim.engine import SimEngine
+from gauntlet.sim.engine import SimEngine
 
 
 def _make_bot(aluminum, offset=(0.0, 0.0, 0.0)):
@@ -156,8 +156,8 @@ def _flat_plate() -> trimesh.Trimesh:
 
 
 def test_hull_vertices_inflates_coplanar_part():
-    from battlebot_sim.mesh.segment import Part
-    from battlebot_sim.sim.mjcf import _hull_vertices
+    from gauntlet.mesh.segment import Part
+    from gauntlet.sim.mjcf import _hull_vertices
 
     part = Part(index=0, mesh=_flat_plate(), face_ids=np.array([0, 1]))
     verts = _hull_vertices(part)
@@ -227,7 +227,7 @@ def _drain(gen):
 def test_iter_battery_emits_every_contact_exactly_once(aluminum):
     """Each contact in the final trace was streamed in exactly one chunk (same
     object), so a live consumer that ingests chunks never drops or double-counts."""
-    from battlebot_sim.sim.battery import iter_battery
+    from gauntlet.sim.battery import iter_battery
 
     wc = NHRL_CLASSES["3lb"]
     arena = build_arena(wc)
@@ -255,7 +255,7 @@ def test_iter_battery_emits_every_contact_exactly_once(aluminum):
 def test_iter_battery_trace_matches_run_battery(aluminum):
     """Draining the generator yields a trace identical (deterministically) to the
     run_battery drainer on a fresh engine."""
-    from battlebot_sim.sim.battery import iter_battery
+    from gauntlet.sim.battery import iter_battery
 
     wc = NHRL_CLASSES["3lb"]
     arena = build_arena(wc)
@@ -273,7 +273,7 @@ def test_iter_battery_trace_matches_run_battery(aluminum):
 
 def test_iter_battery_cancel_returns_partial_trace(aluminum):
     """Closing the generator mid-run finalizes and returns the partial trace."""
-    from battlebot_sim.sim.battery import iter_battery
+    from gauntlet.sim.battery import iter_battery
 
     wc = NHRL_CLASSES["3lb"]
     arena = build_arena(wc)

@@ -5,8 +5,8 @@ import logging
 
 import trimesh
 
-from battlebot_sim.logging_setup import ROOT_LOGGER_NAME, configure_logging
-from battlebot_sim.mesh.segment import _hull_or_none
+from gauntlet.logging_setup import ROOT_LOGGER_NAME, configure_logging
+from gauntlet.mesh.segment import _hull_or_none
 
 
 def test_configure_logging_is_idempotent():
@@ -35,7 +35,7 @@ def test_guarded_hull_fallback_is_logged(caplog):
     degenerate = trimesh.Trimesh(
         vertices=[[0, 0, 0], [1, 0, 0], [2, 0, 0]], faces=[[0, 1, 2]], process=False
     )
-    with caplog.at_level(logging.DEBUG, logger="battlebot_sim.mesh.segment"):
+    with caplog.at_level(logging.DEBUG, logger="gauntlet.mesh.segment"):
         result = _hull_or_none(degenerate)
 
     assert result is None

@@ -5,11 +5,11 @@ import numpy as np
 import pytest
 import trimesh
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.config import DEFAULT_CONFIG
-from battlebot_sim.materials.assign import NHRL_CLASSES
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
-from battlebot_sim.sim.engine import SimEngine
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.config import DEFAULT_CONFIG
+from gauntlet.materials.assign import NHRL_CLASSES
+from gauntlet.mesh.segment import BotModel, segment_mesh
+from gauntlet.sim.engine import SimEngine
 
 pytestmark = pytest.mark.native_isolated
 

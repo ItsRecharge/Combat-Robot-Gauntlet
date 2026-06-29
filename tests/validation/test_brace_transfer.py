@@ -14,11 +14,11 @@ import numpy as np
 import pytest
 import trimesh
 
-from battlebot_sim.config import DEFAULT_CONFIG
-from battlebot_sim.damage.braces import apply_brace_sharing
-from battlebot_sim.damage.model import DamageResult
-from battlebot_sim.materials.library import load_default_library
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
+from gauntlet.config import DEFAULT_CONFIG
+from gauntlet.damage.braces import apply_brace_sharing
+from gauntlet.damage.model import DamageResult
+from gauntlet.materials.library import load_default_library
+from gauntlet.mesh.segment import BotModel, segment_mesh
 
 pytestmark = pytest.mark.validation
 

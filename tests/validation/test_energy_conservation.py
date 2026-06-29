@@ -11,12 +11,12 @@ import numpy as np
 import pytest
 import trimesh
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.damage.model import compute_damage
-from battlebot_sim.materials.assign import NHRL_CLASSES
-from battlebot_sim.materials.library import load_default_library
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
-from battlebot_sim.sim.recorder import ContactEvent, SimTrace
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.damage.model import compute_damage
+from gauntlet.materials.assign import NHRL_CLASSES
+from gauntlet.materials.library import load_default_library
+from gauntlet.mesh.segment import BotModel, segment_mesh
+from gauntlet.sim.recorder import ContactEvent, SimTrace
 
 pytestmark = pytest.mark.validation
 

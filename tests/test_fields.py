@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from battlebot_sim.damage.fields import normalize, vertex_scalars
+from gauntlet.damage.fields import normalize, vertex_scalars
 
 
 def test_normalize_linear_minmax():

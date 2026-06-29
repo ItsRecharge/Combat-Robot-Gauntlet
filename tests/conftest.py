@@ -3,7 +3,7 @@
 import pytest
 import trimesh
 
-from battlebot_sim.materials.library import load_default_library
+from gauntlet.materials.library import load_default_library
 
 
 @pytest.fixture

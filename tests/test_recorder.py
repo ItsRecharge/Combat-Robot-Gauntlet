@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from battlebot_sim.sim.recorder import ContactEvent, FrameSample, SimTrace, StreamChunk
+from gauntlet.sim.recorder import ContactEvent, FrameSample, SimTrace, StreamChunk
 
 
 def _contact(part_index=0, nf=100.0, tf=0.0):

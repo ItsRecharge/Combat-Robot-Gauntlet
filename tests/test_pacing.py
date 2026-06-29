@@ -1,6 +1,6 @@
 """Unit tests for the pure wall-clock pacing helper (no Qt, fake clock)."""
 
-from battlebot_sim.ui.pacing import pace_schedule
+from gauntlet.ui.pacing import pace_schedule
 
 
 def test_on_time_schedules_one_period_ahead():

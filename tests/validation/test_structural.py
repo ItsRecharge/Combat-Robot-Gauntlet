@@ -8,7 +8,7 @@ silently shifting the failure verdict.
 import numpy as np
 import pytest
 
-from battlebot_sim.damage import structural as st
+from gauntlet.damage import structural as st
 
 # --- contact: subsurface von Mises onset ------------------------------------
 

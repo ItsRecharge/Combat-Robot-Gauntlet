@@ -5,8 +5,8 @@ import numpy as np
 import pytest
 import trimesh
 
-from battlebot_sim.errors import ValidationError
-from battlebot_sim.validation import (
+from gauntlet.errors import ValidationError
+from gauntlet.validation import (
     validate_mass,
     validate_mesh,
     validate_run_params,
@@ -58,14 +58,14 @@ def test_validate_mass_rejects_negative_and_nonfinite():
 
 
 def test_load_bot_rejects_bad_scale():
-    from battlebot_sim.mesh.segment import load_bot, sample_bot_path
+    from gauntlet.mesh.segment import load_bot, sample_bot_path
 
     with pytest.raises(ValidationError):
         load_bot(sample_bot_path(), scale_to_m=0.0)
 
 
 def test_weight_check_rejects_nan_mass():
-    from battlebot_sim.materials.assign import NHRL_CLASSES, validate_weight_class
+    from gauntlet.materials.assign import NHRL_CLASSES, validate_weight_class
 
     with pytest.raises(ValidationError):
         validate_weight_class(float("nan"), NHRL_CLASSES["3lb"])

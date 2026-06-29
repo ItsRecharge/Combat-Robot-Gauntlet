@@ -2,12 +2,12 @@
 
 import math
 
-from battlebot_sim.materials.assign import (
+from gauntlet.materials.assign import (
     LB_TO_KG,
     NHRL_CLASSES,
     validate_weight_class,
 )
-from battlebot_sim.materials.library import Material, MaterialLibrary, load_default_library
+from gauntlet.materials.library import Material, MaterialLibrary, load_default_library
 
 
 def test_default_library_loads_presets():

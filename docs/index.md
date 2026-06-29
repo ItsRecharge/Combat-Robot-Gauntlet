@@ -1,4 +1,4 @@
-# BattleBot Sim documentation
+# Combat Robot Stress-Test Gauntlet documentation
 
 Impact-damage simulator for combat robots: assign materials to a CAD model, run
 an NHRL stress battery in a MuJoCo cage, and read damage heatmaps.
@@ -14,9 +14,9 @@ an NHRL stress battery in a MuJoCo cage, and read damage heatmaps.
 ## Configuration
 
 All physics/damage tuning constants live on typed dataclasses in
-[`battlebot_sim/config.py`](../battlebot_sim/config.py). The defaults reproduce
+[`gauntlet/config.py`](../gauntlet/config.py). The defaults reproduce
 the historical behaviour; override a subset with a TOML file via
-`battlebot_sim.config.load_config(path)`:
+`gauntlet.config.load_config(path)`:
 
 ```toml
 [damage]

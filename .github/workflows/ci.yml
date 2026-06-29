@@ -23,7 +23,7 @@ jobs:
       # Formatting is being migrated to ruff-format incrementally (pre-commit
       # formats touched files); it is not yet a hard gate across the legacy tree.
       - name: mypy
-        run: mypy battlebot_sim
+        run: mypy gauntlet
 
   test-windows:
     name: Tests (Windows, py${{ matrix.python }})
@@ -63,4 +63,4 @@ jobs:
           tests/test_config.py tests/test_validation.py tests/test_damage.py
           tests/test_mesh.py tests/test_materials.py tests/test_logging_setup.py
           tests/test_golden_selftest.py
-          --cov=battlebot_sim --cov-report=term-missing
+          --cov=gauntlet --cov-report=term-missing

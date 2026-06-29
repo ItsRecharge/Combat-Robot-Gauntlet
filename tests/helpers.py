@@ -1,6 +1,6 @@
 """Shared test helpers for the headless damage pipeline.
 
-The ``--selftest`` path (see ``battlebot_sim.__main__``) exercises the whole
+The ``--selftest`` path (see ``gauntlet.__main__``) exercises the whole
 offline pipeline: load the bundled sample bot, run one seeded stress battery, and
 compute the damage fields. Several test modules (the golden-baseline regression
 oracle, and the fidelity-validation suite) need that exact result, so the runner
@@ -11,24 +11,24 @@ from __future__ import annotations
 
 import numpy as np
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.damage.model import DamageResult, compute_damage
-from battlebot_sim.materials.assign import NHRL_CLASSES
-from battlebot_sim.materials.library import load_default_library
-from battlebot_sim.mesh.segment import SAMPLE_SCALE_TO_M, load_bot, sample_bot_path
-from battlebot_sim.sim.battery import StressBattery, run_battery
-from battlebot_sim.sim.recorder import SimTrace
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.damage.model import DamageResult, compute_damage
+from gauntlet.materials.assign import NHRL_CLASSES
+from gauntlet.materials.library import load_default_library
+from gauntlet.mesh.segment import SAMPLE_SCALE_TO_M, load_bot, sample_bot_path
+from gauntlet.sim.battery import StressBattery, run_battery
+from gauntlet.sim.recorder import SimTrace
 
 
 def run_selftest_pipeline(seed: int = 0, n_trials: int = 1, fps: int = 30):
     """Run the seeded offline pipeline and return ``(trace, result)``.
 
-    Mirrors ``battlebot_sim.__main__._run_selftest`` (minus the VTK render) so the
+    Mirrors ``gauntlet.__main__._run_selftest`` (minus the VTK render) so the
     numbers a test pins here are the numbers the shipped self-test produces.
     """
     # Import SimEngine lazily so merely importing this module doesn't pull in
     # MuJoCo (lets tests use summarize_result without the native engine).
-    from battlebot_sim.sim.engine import SimEngine
+    from gauntlet.sim.engine import SimEngine
 
     library = load_default_library()
     bot = load_bot(str(sample_bot_path()), scale_to_m=SAMPLE_SCALE_TO_M)

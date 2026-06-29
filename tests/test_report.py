@@ -2,15 +2,15 @@
 
 import os
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.damage.braces import apply_brace_sharing
-from battlebot_sim.damage.model import compute_damage
-from battlebot_sim.materials.assign import NHRL_CLASSES
-from battlebot_sim.materials.library import load_default_library
-from battlebot_sim.mesh.segment import load_bot
-from battlebot_sim.report.export import export_report
-from battlebot_sim.sim.battery import StressBattery, run_battery
-from battlebot_sim.sim.engine import SimEngine
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.damage.braces import apply_brace_sharing
+from gauntlet.damage.model import compute_damage
+from gauntlet.materials.assign import NHRL_CLASSES
+from gauntlet.materials.library import load_default_library
+from gauntlet.mesh.segment import load_bot
+from gauntlet.report.export import export_report
+from gauntlet.sim.battery import StressBattery, run_battery
+from gauntlet.sim.engine import SimEngine
 
 SAMPLE = os.path.join(os.path.dirname(__file__), "..", "data", "sample_bots", "wedge_bot.stl")
 
@@ -40,7 +40,7 @@ def test_full_pipeline_and_report(tmp_path):
     assert os.path.getsize(paths["failure_png"]) > 1000
 
     report_text = open(paths["report"], encoding="utf-8").read()
-    assert "BattleBot Damage Report" in report_text
+    assert "Combat Robot Stress-Test Gauntlet Damage Report" in report_text
     assert "Per-part damage" in report_text
     assert "Worst impacts" in report_text
     # The report must reach an explicit pass/fail verdict.

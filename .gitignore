@@ -6,7 +6,7 @@ __pycache__/
 dist/
 *.spec.bak
 
-# PyInstaller work dir (keep build/battlebot_sim.spec tracked)
+# PyInstaller work dir (keep build/gauntlet.spec tracked)
 build/pyi-work/
 build/*.log
 
@@ -16,7 +16,7 @@ venv/
 
 # PyInstaller
 *.exe
-battlebot_sim.build/
+gauntlet.build/
 
 # OS / editor
 .vscode/

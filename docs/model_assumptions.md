@@ -1,6 +1,6 @@
 # Damage model: assumptions, scope & limitations
 
-BattleBot Sim predicts an **absolute** per-part failure margin — read it as a
+Combat Robot Stress-Test Gauntlet predicts an **absolute** per-part failure margin — read it as a
 yield/fracture prediction, not merely a ranking — to help you reason about material
 and geometry choices. It is a *hybrid* tool: rigid-body physics for the motion,
 classical mechanics of materials for the stress. It is hand-calc grade, **not** a
@@ -65,7 +65,7 @@ accumulated over the whole run:
 
 ## Valid input ranges
 
-Enforced at the boundary (`battlebot_sim/validation.py`):
+Enforced at the boundary (`gauntlet/validation.py`):
 
 - **Mesh:** finite vertices, ≥ 1 face, bounding box within `[1 µm, 1 km]` after
   scaling. Outside this is treated as a units mistake.
@@ -89,6 +89,6 @@ Geometry is SI metres throughout; an STL exported in millimetres needs
 ## Tuning constants
 
 Every constant above lives on typed dataclasses in
-[`battlebot_sim/config.py`](../battlebot_sim/config.py) with documented defaults,
+[`gauntlet/config.py`](../gauntlet/config.py) with documented defaults,
 overridable via a TOML file (`load_config`). Their influence on the verdict is
 quantified in [uncertainty.md](uncertainty.md).

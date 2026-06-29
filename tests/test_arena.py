@@ -1,7 +1,7 @@
 """Tests for NHRL cage geometry."""
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.materials.assign import NHRL_CLASSES
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.materials.assign import NHRL_CLASSES
 
 
 def test_arena_has_six_surfaces():

@@ -3,13 +3,13 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "battlebot-sim"
+name = "gauntlet"
 version = "0.1.1"
-description = "Impact-damage simulator for combat robots: assign materials to an STL, run an NHRL stress battery, and view damage heatmaps."
+description = "Combat Robot Stress-Test Gauntlet — impact-damage simulator for combat robots: assign materials to an STL, run an NHRL stress battery, and view damage heatmaps."
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Neel Bansal", email = "neel.m.bansal@gmail.com" }]
-keywords = ["battlebot", "combat-robotics", "simulation", "mujoco", "damage", "nhrl"]
+keywords = ["gauntlet", "combat-robotics", "simulation", "mujoco", "damage", "nhrl"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Manufacturing",
@@ -43,18 +43,18 @@ dev = [
 ]
 
 [project.scripts]
-battlebot-sim = "battlebot_sim.__main__:main"
+gauntlet = "gauntlet.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/ItsRecharge/battlebot-sim"
-Repository = "https://github.com/ItsRecharge/battlebot-sim"
-Issues = "https://github.com/ItsRecharge/battlebot-sim/issues"
+Homepage = "https://github.com/ItsRecharge/gauntlet"
+Repository = "https://github.com/ItsRecharge/gauntlet"
+Issues = "https://github.com/ItsRecharge/gauntlet/issues"
 
 [tool.setuptools.packages.find]
-include = ["battlebot_sim*"]
+include = ["gauntlet*"]
 
 [tool.setuptools.package-data]
-battlebot_sim = ["../data/*.json"]
+gauntlet = ["../data/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -78,24 +78,24 @@ ignore = ["E501", "B008"]
 python_version = "3.10"
 ignore_missing_imports = true   # mujoco / pyvista / trimesh / PySide6 ship no stubs
 follow_imports = "silent"       # don't report errors in not-yet-gated dependencies
-files = ["battlebot_sim"]
+files = ["gauntlet"]
 # The GUI (Qt-heavy, verified on-display) and a few legacy modules carry
 # pre-existing type debt; exempt them for now and widen this gate over time.
-exclude = "battlebot_sim/(ui/|viz\\.py|mesh/segment\\.py|materials/library\\.py|sim/battery\\.py)"
+exclude = "gauntlet/(ui/|viz\\.py|mesh/segment\\.py|materials/library\\.py|sim/battery\\.py)"
 
 # Start strict only on the new, fully-typed pure-logic modules; widen over time.
 [[tool.mypy.overrides]]
 module = [
-    "battlebot_sim.config",
-    "battlebot_sim.validation",
-    "battlebot_sim.errors",
-    "battlebot_sim.logging_setup",
+    "gauntlet.config",
+    "gauntlet.validation",
+    "gauntlet.errors",
+    "gauntlet.logging_setup",
 ]
 disallow_untyped_defs = true
 
 [tool.coverage.run]
-source = ["battlebot_sim"]
-omit = ["battlebot_sim/ui/viewport.py"]  # needs a live GL context; verified on-display, not in CI
+source = ["gauntlet"]
+omit = ["gauntlet/ui/viewport.py"]  # needs a live GL context; verified on-display, not in CI
 
 [tool.coverage.report]
 show_missing = true

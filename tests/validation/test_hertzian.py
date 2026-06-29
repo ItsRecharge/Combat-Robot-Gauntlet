@@ -15,7 +15,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from battlebot_sim.damage.model import _hertzian_peak_pressure
+from gauntlet.damage.model import _hertzian_peak_pressure
 
 pytestmark = pytest.mark.validation
 

@@ -3,19 +3,19 @@
 import numpy as np
 import trimesh
 
-from battlebot_sim.arena.nhrl import build_arena
-from battlebot_sim.damage.braces import apply_brace_sharing
-from battlebot_sim.damage.fields import normalize, vertex_scalars
-from battlebot_sim.damage.model import (
+from gauntlet.arena.nhrl import build_arena
+from gauntlet.damage.braces import apply_brace_sharing
+from gauntlet.damage.fields import normalize, vertex_scalars
+from gauntlet.damage.model import (
     _effective_modulus,
     _hertzian_peak_pressure,
     compute_damage,
 )
-from battlebot_sim.materials.assign import NHRL_CLASSES
-from battlebot_sim.materials.library import load_default_library
-from battlebot_sim.mesh.segment import BotModel, segment_mesh
-from battlebot_sim.sim.battery import StressBattery, run_battery
-from battlebot_sim.sim.engine import SimEngine
+from gauntlet.materials.assign import NHRL_CLASSES
+from gauntlet.materials.library import load_default_library
+from gauntlet.mesh.segment import BotModel, segment_mesh
+from gauntlet.sim.battery import StressBattery, run_battery
+from gauntlet.sim.engine import SimEngine
 
 
 def _braced_bot(library, brace_thickness=0.02):
@@ -87,7 +87,7 @@ def test_brace_relieves_stress_monotonically():
     # Identical synthetic stress field on the braced parts; vary brace thickness.
     def braced_margin(thickness):
         bot = _braced_bot(library, brace_thickness=thickness)
-        from battlebot_sim.damage.model import DamageResult
+        from gauntlet.damage.model import DamageResult
         n_faces = len(bot.original.faces)
         face_part = np.zeros(n_faces, dtype=np.int64)
         for p in bot.parts:
@@ -117,7 +117,7 @@ def test_brace_absorbs_transferred_load():
     """Load shed by adjacent parts must surface in the brace's own margin."""
     library = load_default_library()
     bot = _braced_bot(library, brace_thickness=0.02)
-    from battlebot_sim.damage.model import DamageResult
+    from gauntlet.damage.model import DamageResult
 
     n_faces = len(bot.original.faces)
     face_part = np.zeros(n_faces, dtype=np.int64)
@@ -153,8 +153,8 @@ def test_brace_relieves_structural_stress_in_part_stress():
     contact stress."""
     library = load_default_library()
     bot = _braced_bot(library, brace_thickness=0.02)
-    from battlebot_sim.damage.model import DamageResult
-    from battlebot_sim.damage.structural import PartStress
+    from gauntlet.damage.model import DamageResult
+    from gauntlet.damage.structural import PartStress
 
     n_faces = len(bot.original.faces)
     face_part = np.zeros(n_faces, dtype=np.int64)
@@ -198,7 +198,7 @@ def test_no_braces_is_noop():
     bot = _braced_bot(library)
     for p in bot.parts:
         p.is_brace = False
-    from battlebot_sim.damage.model import DamageResult
+    from gauntlet.damage.model import DamageResult
     n_faces = len(bot.original.faces)
     peak = np.full(n_faces, 100e6)
     result = DamageResult(
@@ -216,7 +216,7 @@ def test_accumulator_batched_matches_oneshot():
     """Ingesting contacts in arbitrary consecutive batches must equal a single
     one-shot ingest — the guarantee that the live stream and the offline path
     produce identical damage fields."""
-    from battlebot_sim.damage.model import DamageAccumulator
+    from gauntlet.damage.model import DamageAccumulator
 
     library = load_default_library()
     cls = NHRL_CLASSES["3lb"]
