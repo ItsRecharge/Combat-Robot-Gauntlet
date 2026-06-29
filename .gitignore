@@ -28,4 +28,6 @@ gauntlet.build/
 out/
 *.png
 !data/**/*.png
+# README screenshots — keep despite the *.png ignore above
+!docs/img/*.png
 test_stl/
