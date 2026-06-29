@@ -30,7 +30,14 @@ def app_icon_path() -> str:
     bundled ``assets/`` lives in ``sys._MEIPASS``; in a source checkout it sits
     at the project root. ``.icns`` on macOS, ``.ico`` everywhere else.
     """
-    name = "gauntlet.icns" if sys.platform == "darwin" else "gauntlet.ico"
+    if sys.platform == "darwin":
+        name = "gauntlet.icns"
+    elif sys.platform == "win32":
+        name = "gauntlet.ico"
+    else:
+        # Linux: PNG is the one raster format Qt always decodes when frozen, and
+        # it doubles as the AppImage desktop icon. (ELF can't embed an icon.)
+        name = "gauntlet.png"
     if getattr(sys, "frozen", False):
         return str(Path(sys._MEIPASS) / "assets" / name)   # PyInstaller unpack dir
     return str(Path(__file__).resolve().parents[1] / "build" / name)  # source checkout
@@ -144,6 +151,16 @@ def main() -> int:
     splash = StartupSplash(icon)
     splash.show()
     app.processEvents()
+
+    # One-file Windows builds show PyInstaller's native splash during the
+    # bootloader unpack (before Python starts); close it now that the Qt loading
+    # bar has taken over. No-op in dev and on Mac/Linux (module absent).
+    try:
+        import pyi_splash  # type: ignore[import-not-found]
+
+        pyi_splash.close()
+    except Exception:
+        pass
 
     splash.step(15, "Loading physics engine…")
     preload_native_libraries()      # pin native-lib load order before anything else

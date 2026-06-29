@@ -1,0 +1,39 @@
+# UTF-8
+#
+# PyInstaller version-info resource for the Windows .exe. Sets the file's
+# Properties -> Details fields (Company/Publisher, Product, Copyright, version).
+# Referenced from build/gauntlet.spec via EXE(version=...). Note: this sets the
+# *name* shown by Windows, not a code-signing certificate — an unsigned exe
+# still shows "Unknown publisher" in the SmartScreen trust prompt.
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(0, 1, 1, 0),
+    prodvers=(0, 1, 1, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0),
+  ),
+  kids=[
+    StringFileInfo(
+      [
+        StringTable(
+          "040904B0",
+          [
+            StringStruct("CompanyName", "Neel Bansal"),
+            StringStruct("FileDescription", "Combat Robot Stress-Test Gauntlet"),
+            StringStruct("FileVersion", "0.1.1"),
+            StringStruct("InternalName", "Combat-Robot-Gauntlet"),
+            StringStruct("LegalCopyright", "© Neel Bansal"),
+            StringStruct("OriginalFilename", "Combat-Robot-Gauntlet.exe"),
+            StringStruct("ProductName", "Combat-Robot-Gauntlet"),
+            StringStruct("ProductVersion", "0.1.1"),
+          ],
+        )
+      ]
+    ),
+    VarFileInfo([VarStruct("Translation", [1033, 1200])]),
+  ],
+)

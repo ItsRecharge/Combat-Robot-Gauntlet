@@ -30,4 +30,6 @@ out/
 !data/**/*.png
 # README screenshots — keep despite the *.png ignore above
 !docs/img/*.png
+# App icon (PNG) — bundled by the PyInstaller spec + AppImage; must be tracked
+!build/*.png
 test_stl/
