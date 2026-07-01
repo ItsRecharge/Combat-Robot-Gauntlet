@@ -1,12 +1,18 @@
 # -*- mode: python ; coding: utf-8 -*-
 """PyInstaller spec for the Gauntlet.
 
-Build (from the project root):
-    .venv\\Scripts\\pyinstaller build\\gauntlet.spec --noconfirm
+Build (from the project root, same command on both OSes):
+    Windows:  .venv\\Scripts\\pyinstaller build\\gauntlet.spec --noconfirm
+    macOS:    .venv/bin/pyinstaller   build/gauntlet.spec --noconfirm
 
-Produces dist/Gauntlet/Gauntlet.exe (one-folder build). One-folder is
-deliberate: VTK is large and a one-file build unpacks hundreds of MB to a temp
-dir on every launch. Zip the dist/Gauntlet folder to distribute.
+Output per platform:
+    Windows -> dist/Combat-Robot-Gauntlet.exe       (ONE FILE, native splash
+               masks the unpack; Publisher = Neel Bansal via win_version_info)
+    macOS   -> dist/Combat-Robot-Gauntlet.app        (double-click, no Terminal)
+    Linux   -> dist/Combat-Robot-Gauntlet/           (one-folder; CI wraps it
+               into a single .AppImage — see .github/workflows/release.yml)
+macOS/Linux stay one-folder: VTK is large and a one-file build there unpacks
+hundreds of MB to a temp dir on every launch. Windows is one-file by request.
 
 NOTE: we deliberately do NOT collect_all() vtkmodules or pyvista. Those force
 every VTK submodule to be imported at analysis time, and importing the OpenGL
@@ -16,12 +22,22 @@ correctly from the normal import graph instead.
 """
 
 import os
+import sys
 from PyInstaller.utils.hooks import (
     collect_data_files,
     collect_dynamic_libs,
 )
 
 PROJECT_ROOT = os.path.abspath(os.getcwd())
+
+# Per-platform app icon. Both are bundled into assets/ below so the running app
+# can load one at runtime (QIcon) regardless of which OS built it.
+ICO_PATH = os.path.join(PROJECT_ROOT, "build", "gauntlet.ico")
+ICNS_PATH = os.path.join(PROJECT_ROOT, "build", "gauntlet.icns")
+PNG_PATH = os.path.join(PROJECT_ROOT, "build", "gauntlet.png")   # Linux + native splash
+ICON = ICNS_PATH if sys.platform == "darwin" else ICO_PATH
+# Windows version resource: sets Publisher/Company = Neel Bansal in the exe.
+WIN_VERSION = os.path.join(PROJECT_ROOT, "build", "win_version_info.txt")
 
 datas, binaries, hiddenimports = [], [], []
 
@@ -43,6 +59,14 @@ datas += collect_data_files("pyvistaqt")
 datas += [
     (os.path.join(PROJECT_ROOT, "data", "materials.json"), "data"),
     (os.path.join(PROJECT_ROOT, "data", "sample_bots"), os.path.join("data", "sample_bots")),
+]
+
+# App icons, bundled so the running app can set its window/taskbar icon at
+# runtime via gauntlet.__main__.app_icon_path() (resolves assets/ from _MEIPASS).
+datas += [
+    (ICO_PATH, "assets"),
+    (ICNS_PATH, "assets"),
+    (PNG_PATH, "assets"),
 ]
 
 hiddenimports += [
@@ -88,25 +112,73 @@ a = Analysis(
 
 pyz = PYZ(a.pure)
 
-exe = EXE(
-    pyz,
-    a.scripts,
-    [],
-    exclude_binaries=True,
-    name="Gauntlet",
-    debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=False,
-    console=False,
-    icon=os.path.join(PROJECT_ROOT, "build", "gauntlet.ico"),
-)
+if sys.platform == "win32":
+    # Windows: ONE-FILE exe (no _internal/ folder — a single distributable file).
+    # The bootloader unpacks to a temp dir before Python starts, so a native
+    # PyInstaller splash covers that gap; gauntlet.__main__ closes it (pyi_splash)
+    # once the Qt loading bar takes over. version= stamps Publisher = Neel Bansal.
+    splash = Splash(
+        PNG_PATH,
+        binaries=a.binaries,
+        datas=a.datas,
+        text_pos=None,
+    )
+    exe = EXE(
+        pyz,
+        a.scripts,
+        a.binaries,
+        a.datas,
+        splash,
+        splash.binaries,
+        [],
+        name="Combat-Robot-Gauntlet",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=False,
+        runtime_tmpdir=None,
+        console=False,
+        icon=ICON,
+        version=WIN_VERSION,
+    )
+else:
+    # macOS / Linux: one-folder build. macOS is then wrapped in a .app (single
+    # double-click icon, no Terminal); Linux one-folder feeds the AppImage build.
+    exe = EXE(
+        pyz,
+        a.scripts,
+        [],
+        exclude_binaries=True,
+        name="Combat-Robot-Gauntlet",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=False,
+        console=False,
+        icon=ICON,
+    )
 
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=False,
-    name="Gauntlet",
-)
+    coll = COLLECT(
+        exe,
+        a.binaries,
+        a.datas,
+        strip=False,
+        upx=False,
+        name="Combat-Robot-Gauntlet",
+    )
+
+    if sys.platform == "darwin":
+        app = BUNDLE(
+            coll,
+            name="Combat-Robot-Gauntlet.app",
+            icon=ICNS_PATH,
+            bundle_identifier="com.neelbansal.combatrobotgauntlet",
+            info_plist={
+                "NSHighResolutionCapable": True,
+                "CFBundleName": "Combat-Robot-Gauntlet",
+                "CFBundleDisplayName": "Combat-Robot-Gauntlet",
+                # Publisher / author surfaced in Finder "Get Info".
+                "NSHumanReadableCopyright": "© Neel Bansal",
+                "CFBundleGetInfoString": "Combat-Robot-Gauntlet — Neel Bansal",
+            },
+        )
